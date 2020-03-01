@@ -1,7 +1,8 @@
 <div class="container">
     <h2 style="text-align: center">Результаты поиска по запросу <?=$search?></h2>
     <div class="row justify-content-center">
-        <?php if ($goods) { foreach ($goods as $good) { ?>
+        <?php if ($goods) {
+            foreach ($goods as $good) { ?>
             <div class="col-4">
                 <div class="product">
                     <div class="product-img">
