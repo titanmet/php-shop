@@ -1,3 +1,4 @@
+<?=\app\widgets\MenuWidget::widget()?>
 <div class="container">
     <div class="row">
         <?php foreach ($goods as $good) { ?>

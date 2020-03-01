@@ -2,6 +2,7 @@
 
 
 namespace app\models;
+
 use yii\db\ActiveRecord;
 use Yii;
 
@@ -13,7 +14,8 @@ class Good extends ActiveRecord
         return 'good';
     }
 
-    public function getAllGoods() {
+    public function getAllGoods()
+    {
         $goods = Yii::$app->cache->get('goods');
         if (!$goods) {
             $goods = Good::find()->asArray()->all();
@@ -22,4 +24,18 @@ class Good extends ActiveRecord
 
         return $goods;
     }
+
+    public function getGoodsCategories($id)
+    {
+        $catGoods = Good::find()->where(['category' => $id])->asArray()->all();
+        return $catGoods;
+    }
+
+    public function getSearchResult($search)
+    {
+        $searchResults = Good::find()->where(['like', 'name', $search])->asArray()->all();
+        return $searchResults;
+    }
+
+
 }
