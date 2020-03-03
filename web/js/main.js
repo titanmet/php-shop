@@ -1,3 +1,8 @@
+$('.modal-content').on('click','.btn-next',function () {
+    $('#cart').modal('hide');
+    $('#order').modal('show');
+})
+
 function openCart(event) {
     event.preventDefault();
     $.ajax({
@@ -13,6 +18,22 @@ function openCart(event) {
     })
 }
 
+function clearCart(event) {
+    if (confirm('Точно очистить корзину ?')) {
+        event.preventDefault();
+        $.ajax({
+            url: '/cart/clear',
+            type: 'GET',
+            success: function (res) {
+                $('#cart .modal-content').html(res);
+            },
+            error: function () {
+                alert('error');
+            }
+        })
+    }
+}
+
 
 $('.product-button__add').on('click',function (event) {
     event.preventDefault();
@@ -25,6 +46,31 @@ $('.product-button__add').on('click',function (event) {
         type: 'GET',
         success: function (res) {
             $('#cart .modal-content').html(res);
+            $('.menu-quantity').html('('+ $('.total-quantity').html() +')');
+        },
+        error: function () {
+            alert('error');
+        }
+    })
+})
+
+$('.modal-content').on('click', '.btn-close', function () {
+    $('#cart').modal('hide');
+})
+
+$('.modal-content').on('click', '.delete', function () {
+   let id = $(this).data('id');
+    $.ajax({
+        url: '/cart/delete',
+        data: {id: id},
+        type: 'GET',
+        success: function (res) {
+            $('#cart .modal-content').html(res);
+            if ($('.total-quantity').html()) {
+                $('.menu-quantity').html('('+ $('.total-quantity').html() +')');
+            } else {
+                $('.menu-quantity').html('(0)');
+            }
         },
         error: function () {
             alert('error');

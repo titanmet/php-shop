@@ -15,13 +15,13 @@ AppAsset::register($this);
 ?>
 <?php $this->beginPage() ?>
 <!DOCTYPE html>
-<html lang="<?= Yii::$app->language ?>">
+<html lang="<?=Yii::$app->language ?>">
 <head>
-    <meta charset="<?= Yii::$app->charset ?>">
+    <meta charset="<?=Yii::$app->charset ?>">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <?php $this->registerCsrfMetaTags() ?>
-    <title><?= Html::encode($this->title) ?></title>
+    <?php Html::csrfMetaTags() ?>
+    <title><?=Html::encode($this->title) ?></title>
     <?php $this->head() ?>
 </head>
 <body>
@@ -32,7 +32,7 @@ AppAsset::register($this);
             <div class="header">
                 <a href="/">На главную</a>
                 <a href="#">Вход в админку</a>
-                <a href="#" onclick="openCart(event)">Корзина</a>
+                <a href="#" onclick="openCart(event)">Корзина <span class="menu-quantity">(<?=$_SESSION['cart.totalQuantity'] ? $_SESSION['cart.totalQuantity'] : 0 ?>)</span></a>
                 <form action="<?=Url::to(['category/search'])?>" method="get">
                 <input type="text" style="padding: 5px" placeholder="Поиск..." name="search">
                 </form>
@@ -40,7 +40,7 @@ AppAsset::register($this);
         </div>
     </header>
     <div class="container">
-<?= $content ?>
+<?=$content ?>
     </div>
     <footer>
         <div class="container">
@@ -52,9 +52,15 @@ AppAsset::register($this);
 </section>
 
 <div id="cart" class="modal fade bd-example-modal-xl" tabindex="-1" role="dialog" aria-labelledby="myExtraLargeModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-xl" role="document">
-        <div class="modal-content">
-            <h1>Cart</h1>
+    <div class="modal-dialog modal-xl">
+        <div style="padding: 15px" class="modal-content">
+        </div>
+    </div>
+</div>
+
+<div id="order" class="modal fade bd-example-modal-xl" tabindex="-1" role="dialog" aria-labelledby="myExtraLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div style="padding: 15px" class="modal-content">
         </div>
     </div>
 </div>
