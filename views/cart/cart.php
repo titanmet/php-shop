@@ -25,7 +25,7 @@
                 <td style="vertical-align: middle"><?=$good['goodQuantity'] ?></td>
                 <td style="vertical-align: middle"><?=$good['price'] * $good['goodQuantity'] ?> рублей</td>
                 <td class="delete" data-id="<?=$id?>" style="text-align: center; cursor: pointer; vertical-align: middle; color: red">
-                    <span>&#10006;✖</span></td>
+                    <span>&#1006;✖</span></td>
             </tr>
         <?php } ?>
         <tr style="border-top: 4px solid black">

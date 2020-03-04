@@ -9,6 +9,7 @@ use app\models\Order;
 use yii\web\Controller;
 use app\models\Cart;
 use app\models\OrderGood;
+use yii\helpers\Url;
 use Yii;
 
 
@@ -17,20 +18,24 @@ class CartController extends Controller
     public function actionOrder() {
         $session = Yii::$app->session;
         $session->open();
+        if (!$session['cart.totalSum']) {
+            return Yii::$app->response->redirect(Url::to('/'));
+        }
         $order = new Order();
         if ($order->load(Yii::$app->request->post())) {
             $order->date = date('Y-m-d H:i:s');
             $order->sum = $session['card.totalSum'];
             if ($order->save()) {
-                Yii::$app->mailer->compose()
-                    ->setFrom(['aaa@aaa.ru' => 'test test'])
-                    ->setTo('titanmet@mail.ru')
+                $currentId = $order->id;
+                Yii::$app->mailer->compose('order-mail',['session'=>$session,'order'=>$order])
+                    ->setFrom(['sushi.webmaster200@gmail.com' => 'test test'])
+                    ->setTo($order->email)
                     ->setSubject('Ваш заказ принят')
                     ->send();
                 $session->remove('cart');
                 $session->remove('cart.totalQuantity');
                 $session->remove('cart.totalSum');
-                return $this->render('success',compact('session'));
+                return $this->render('success',compact('session','currentId'));
             }
         }
         $this->layout = 'empty-layout';
