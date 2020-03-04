@@ -8,10 +8,10 @@ use yii\helpers\Html;
 use yii\bootstrap\Nav;
 use yii\bootstrap\NavBar;
 use yii\widgets\Breadcrumbs;
-use app\assets\AppAsset;
+use app\assets\AdminAppAsset;
 use yii\helpers\Url;
 
-AppAsset::register($this);
+AdminAppAsset::register($this);
 ?>
 <?php $this->beginPage() ?>
 <!DOCTYPE html>
@@ -31,7 +31,7 @@ AppAsset::register($this);
         <div class="container">
             <div class="header">
                 <a href="/">На главную</a>
-                <a href="/admin">Вход в админку</a>
+                <a href="#">Вход в админку</a>
                 <a href="#" onclick="openCart(event)">Корзина <span class="menu-quantity">(<?=$_SESSION['cart.totalQuantity'] ? $_SESSION['cart.totalQuantity'] : 0 ?>)</span></a>
                 <form action="<?=Url::to(['category/search'])?>" method="get">
                 <input type="text" style="padding: 5px" placeholder="Поиск..." name="search">
