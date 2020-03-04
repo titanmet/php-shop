@@ -15,7 +15,8 @@ use Yii;
 
 class CartController extends Controller
 {
-    public function actionOrder() {
+    public function actionOrder()
+    {
         $session = Yii::$app->session;
         $session->open();
         if (!$session['cart.totalSum']) {
@@ -27,7 +28,8 @@ class CartController extends Controller
             $order->sum = $session['card.totalSum'];
             if ($order->save()) {
                 $currentId = $order->id;
-                Yii::$app->mailer->compose('order-mail',['session'=>$session,'order'=>$order])
+                $this->saveOrderInfo($session['cart'], $currentId);
+                Yii::$app->mailer->compose('order-mail', ['session' => $session, 'order' => $order])
                     ->setFrom(['sushi.webmaster200@gmail.com' => 'test test'])
                     ->setTo($order->email)
                     ->setSubject('Ваш заказ принят')
@@ -35,14 +37,31 @@ class CartController extends Controller
                 $session->remove('cart');
                 $session->remove('cart.totalQuantity');
                 $session->remove('cart.totalSum');
-                return $this->render('success',compact('session','currentId'));
+                return $this->render('success', compact('session', 'currentId'));
             }
         }
         $this->layout = 'empty-layout';
-        return $this->render('order', compact('session','order'));
+        return $this->render('order', compact('session', 'order'));
     }
 
-    public function actionDelete($id) {
+    protected function saveOrderInfo($goods, $orderId)
+    {
+        foreach ($goods as $id => $good) {
+            $orderInfo = new OrderGood();
+            $orderInfo->order_id = $orderId;
+            $orderInfo->product_id = $id;
+            $orderInfo->name = $good['name'];
+            $orderInfo->price = $good['price'];
+            $orderInfo->quantity = $good['goodQuantity'];
+            $orderInfo->sum = $good['price'] * $good['goodQuantity'];
+            $orderInfo->save();
+
+        }
+
+    }
+
+    public function actionDelete($id)
+    {
         $session = Yii::$app->session;
         $session->open();
         $cart = new Cart();
@@ -50,7 +69,8 @@ class CartController extends Controller
         return $this->renderPartial('cart', compact('session'));
     }
 
-    public function actionClear() {
+    public function actionClear()
+    {
         $session = Yii::$app->session;
         $session->open();
         $session->remove('cart');
@@ -59,13 +79,15 @@ class CartController extends Controller
         return $this->renderPartial('cart', compact('session'));
     }
 
-    public function actionOpen() {
+    public function actionOpen()
+    {
         $session = Yii::$app->session;
         $session->open();
         return $this->renderPartial('cart', compact('session'));
     }
 
-    public function actionAdd($name) {
+    public function actionAdd($name)
+    {
         $good = new Good();
         $good = $good->getOneGood($name);
         $session = Yii::$app->session;
@@ -73,6 +95,6 @@ class CartController extends Controller
 //        $session->remove('cart');
         $cart = new Cart();
         $cart->addToCart($good);
-        return $this->renderPartial('cart', compact('good','session'));
+        return $this->renderPartial('cart', compact('good', 'session'));
     }
 }
