@@ -1,6 +1,16 @@
 $('.modal-content').on('click','.btn-next',function () {
-    $('#cart').modal('hide');
-    $('#order').modal('show');
+    $.ajax({
+        url: '/cart/order',
+        type: 'GET',
+        success: function (res) {
+            $('#order .modal-content').html(res);
+            $('#cart').modal('hide');
+            $('#order').modal('show');
+        },
+        error: function () {
+            alert('error');
+        }
+    })
 })
 
 function openCart(event) {
